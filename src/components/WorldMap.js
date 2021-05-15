@@ -4,7 +4,8 @@ import {WORLD_MAP_URL} from "../constant";
 import {feature} from "topojson-client";
 import {geoKavrayskiy7} from "d3-geo-projection";
 import {geoGraticule, geoPath} from "d3-geo";
-import { select as d3Select } from 'd3-selection';
+import {select as d3Select} from 'd3-selection';
+import {Spin} from "antd";
 
 const width = 960;
 const height = 600;
@@ -25,6 +26,7 @@ class WorldMap extends Component {
                 const land = feature(data, data.objects.countries).features;
                 this.generateMap(land);
             })
+            .catch(e => console.log('err in fetch world map data ', e))
     }
 
     generateMap = (land) => {
@@ -77,6 +79,12 @@ class WorldMap extends Component {
         return (
             <div className="map-box">
                 <canvas className="map" ref={this.refMap}/>
+                <canvas className="track" ref={this.props.refTrack}/>
+                <div className="hint"></div>
+                {
+                    this.props.loading ?
+                        <Spin tip="Loading..."/> : <></>
+                }
             </div>
         );
     }
