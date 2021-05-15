@@ -3,12 +3,14 @@ import SatSetting from "./SatSetting";
 import SatelliteList from "./SatelliteList";
 import { NEARBY_SATELLITE, STARLINK_CATEGORY, SAT_API_KEY } from "../constant"
 import Axios from "axios"
+import WorldMap from './WorldMap';
 
 class Main extends Component {
     constructor() {
         super();
         this.state={
-            loadingSatellites: false
+            loadingSatellites: false,
+            selected: []
         }
     }
 
@@ -33,6 +35,7 @@ class Main extends Component {
                     {
                         satInfo: response.data,
                         loadingSatellites: false,
+                        selected: [],
                     }
                 )
             })
@@ -44,6 +47,28 @@ class Main extends Component {
             })
     }
 
+    addOrRemove = (item, status) => {
+        let list = this.state.selected;
+        const found = list.some(entry => entry.satid === item.satid);
+        if (status && !found) {
+            list.push(item);
+        }
+        if (!status && found) {
+            list = list.filter(entry => {
+                return entry.satid !== item.satid;
+            })
+        }
+
+        console.log(list);
+        this.setState({
+            selected: list
+        })
+    }
+
+    trackOnClick = () => {
+        console.log(`tracking ${this.state.selected}`)
+    }
+
     render() {
         return (
             <div className='main'>
@@ -51,10 +76,14 @@ class Main extends Component {
                     <SatSetting onShow={this.showNearbySatellite}/>
                     <SatelliteList satInfo={this.state.satInfo}
                                    loading={this.state.loadingSatellites}
+                                   onSelectionChange={this.addOrRemove}
+                                   disableTrack={this.state.selected.length === 0}
+                                   trackOnClick={this.trackOnClick}
+
                     />
                 </div>
                 <div className="right-side">
-                    right
+                    <WorldMap />
                 </div>
             </div>
         );

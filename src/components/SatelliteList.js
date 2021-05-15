@@ -3,7 +3,10 @@ import {List,Avatar, Checkbox, Button, Spin} from "antd";
 import Satellite from "../assets/images/Satellite.svg"
 
 class SatelliteList extends React.Component {
-
+    onChange = e => {
+        const { dataInfo, checked } = e.target;
+        this.props.onSelectionChange(dataInfo, checked);
+    }
 
     render() {
         const satList = this.props.satInfo ? this.props.satInfo.above : [];
@@ -12,6 +15,8 @@ class SatelliteList extends React.Component {
             <div className="sat-list-box">
                 <Button className="sat-list-btn"
                         size="large"
+                        disabled={this.props.disableTrack}
+                        onClick={() => this.props.trackOnClick}
                 >Track on the map
                 </Button>
                 <hr/>
