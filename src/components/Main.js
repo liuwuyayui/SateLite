@@ -25,7 +25,7 @@ class Main extends Component {
         this.refTrack = React.createRef();
     }
 
-    trackOnClick = (duration) => {
+    trackOnClick = async (duration) => {
         const { observerLat, observerLong, observerAlt } = this.state.setting;
         const endTime = duration * 60;
         this.setState({
@@ -34,8 +34,8 @@ class Main extends Component {
         });
         const urls = this.state.selected.map( sat => {
             const { satid } = sat;
-            const url = `${SATELLITE_POSITION_URL}/${satid}/${observerLat}/${observerLong}/${observerAlt}/${endTime}/&apiKey=${SAT_API_KEY}`;
-            return Axios.get(url);
+            const url = `${SAT_BASE_URL}/${SATELLITE_POSITION_URL}/${satid}/${observerLat}/${observerLong}/${observerAlt}/${endTime}/&apiKey=${SAT_API_KEY}`;
+            return Axios.post(PERSONAL_PROXY, {url})
         });
 
         Axios.all(urls)
@@ -45,6 +45,7 @@ class Main extends Component {
                 })
             )
             .then( res => {
+                console.log("res", res);
                 this.setState({
                     satPositions: res,
                     loadingSatPositions: false,
