@@ -9,7 +9,7 @@ class Header extends Component {
             <header className="App-header">
                 <img src={startlinkLogo} className="App-logo" alt="logo"/>
                 <p className="title">
-                    StarLink Tracker
+                  Sate-Lite: A Starlink Satellites Trajectory Dashboard
                 </p>
             </header>
         );
