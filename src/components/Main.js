@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import SatSetting from './SatSetting';
 import SatelliteList from './SatelliteList';
-import { NEARBY_SATELLITE, STARLINK_CATEGORY, SAT_API_KEY, SATELLITE_POSITION_URL } from '../constant';
+import {SAT_BASE_URL, NEARBY_SATELLITE, STARLINK_CATEGORY, SAT_API_KEY, SATELLITE_POSITION_URL, PERSONAL_PROXY} from '../constant';
 import Axios from 'axios';
 import WorldMap from './WorldMap';
 import * as d3Scale from 'd3-scale';
@@ -87,12 +87,12 @@ class Main extends Component {
 
     fetchSatellite = (setting) => {
         const {observerLat, observerLong, observerAlt, radius} = setting;
-        const url = `${NEARBY_SATELLITE}/${observerLat}/${observerLong}/${observerAlt}/${radius}/${STARLINK_CATEGORY}/&apiKey=${SAT_API_KEY}`;
+        const url = `${SAT_BASE_URL}/${NEARBY_SATELLITE}/${observerLat}/${observerLong}/${observerAlt}/${radius}/${STARLINK_CATEGORY}/&apiKey=${SAT_API_KEY}`;
 
         this.setState({
             loadingSatellites: true,
         })
-        Axios.get(url)
+        Axios.post(PERSONAL_PROXY, {url})
             .then(response => {
                 this.setState({
                     satInfo: response.data,
